@@ -28,6 +28,7 @@ Zhaopeng Gu, Bingke Zhu, Guibo Zhu, Yingying Chen, Ming Tang, Jinqiao Wang
     * <a href='#download_vicuna_model'>2.3 Prepare Vicuna Checkpoint</a>
     * <a href='#download_anomalygpt'>2.4 Prepare Delta Weights of AnomalyGPT</a>
     * <a href='#running_demo'>2.5 Deploying Demo</a>
+    * <a href='#docker_demo'>2.6 Docker を利用したデモの実行</a>
 * <a href='#train_anomalygpt'>3. Train Your Own AnomalyGPT</a>
     * <a href='#data_preparation'>3.1 Data Preparation</a>
     * <a href='#training_configurations'>3.2 Training Configurations</a>
@@ -128,6 +129,37 @@ Upon completion of previous steps, you can run the demo locally as
 cd ./code/
 python web_demo.py
 ```
+
+<span id='docker_demo'/>
+
+#### 2.6. Docker を利用したデモの実行
+
+Docker 環境があれば、より手軽にデモを起動できます。事前に **2.1** から
+**2.4** までの手順を実施し、各種チェックポイントを `pretrained_ckpt` と
+`code/ckpt` ディレクトリに配置してください。
+
+1. Docker イメージの作成
+   ```bash
+   docker build -t anomalygpt .
+   ```
+
+2. コンテナの起動（GPU 利用を想定）
+   ```bash
+   docker run --rm -it --gpus all -p 7860:7860 \
+       -v $(pwd)/pretrained_ckpt:/app/pretrained_ckpt \
+       -v $(pwd)/code/ckpt:/app/code/ckpt \
+       -v $(pwd)/data:/app/data \
+       anomalygpt
+   ```
+
+   上記のビルドと実行をまとめた `docker_run.sh` も用意しています。
+   ```bash
+   bash docker_run.sh
+   ```
+
+3. 起動後、ブラウザで `http://localhost:7860` にアクセスするとデモ画面が
+   表示されます。終了する際はコンテナ内のプロセスを `Ctrl+C` で停止して
+   ください。
 
 ****
 
